@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/app/config/appbar_custom.dart';
@@ -31,8 +30,10 @@ class DetailPage extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xff1D6CF3),
-                Color(0xff19D2FE),
+                // Color(0xff1D6CF3),
+                // Color(0xff19D2FE),
+                Color(0xFF2C2C2C),
+                Color(0xFF121212),
               ],
             ),
           ),

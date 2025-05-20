@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/my_app.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_core/firebase_core.dart';
 
 /*
   - Yêu cầu thiết bị cho phép truy cập vị trí hiện tại lat&lon
@@ -50,11 +52,29 @@ Future<Position> _determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
-void main(List<String> args) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyBPUZeUQnQXlgbytnTd24XBRLFBlME4xio",
+        authDomain: "weather-8788b.firebaseapp.com",
+        databaseURL: "https://weather-8788b-default-rtdb.firebaseio.com",
+        projectId: "weather-8788b",
+        storageBucket: "weather-8788b.firebasestorage.app",
+        messagingSenderId: "337409264740",
+        appId: "1:337409264740:web:9539ce12be12ea8b362371",
+        measurementId: "G-ZR6ZN08VFX"
+      ),
+    );
+  } else {
+    await Firebase.initializeApp(); // Android/iOS lấy từ file json
+  }
+
+  // Lấy vị trí người dùng (hàm bạn đã định nghĩa)
   Position positionCurrent = await _determinePosition();
-  runApp(MyApp(
-    positionCurrent: positionCurrent,
-  ));
+
+  // Chạy app truyền vị trí
+  runApp(MyApp(positionCurrent: positionCurrent));
 }

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeDetail extends StatelessWidget {
-  const HomeDetail({super.key, required this.MySpeed, required this.MyHumidity});
-  final num MySpeed;
-  final num MyHumidity;
+  const HomeDetail({super.key, required this.mySpeed, required this.myHumidity});
+  final num mySpeed;
+  final num myHumidity;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -27,7 +27,7 @@ class HomeDetail extends StatelessWidget {
                   top: 15
                 ),
                 child: Text(
-                  MySpeed.toString() + ' Km/h',
+                  '$mySpeed Km/h',
                   style: const TextStyle(fontSize: 20),
                 ),
               ),
@@ -46,7 +46,7 @@ class HomeDetail extends StatelessWidget {
                     top: 15
                 ),
                 child: Text(
-                  MyHumidity.round().toString() + ' %',
+                  '${myHumidity.round()} %',
                   style: const TextStyle(fontSize: 20),
                 ),
               ),

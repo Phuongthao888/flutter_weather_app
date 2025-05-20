@@ -5,7 +5,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/app/utils/Custom.dart';
+import 'package:weather_app/app/utils/custom.dart';
 import 'package:weather_app/models/weather.dart';
 
 class ApiRepository {
@@ -18,7 +18,7 @@ class ApiRepository {
     try {
       final dio = Dio();
       final res = await dio.get(
-          'https://api.openweathermap.org/data/2.5/weather?lat=${position?.latitude}&lon=${position?.longitude}&units=metric&appid=${MyKey.api_token}');
+          'https://api.openweathermap.org/data/2.5/weather?lat=${position?.latitude}&lon=${position?.longitude}&units=metric&appid=${MyKey.apiToken}');
       final data = res.data;
       WeatherData result = WeatherData.fromMap(data);
       return result;
@@ -31,7 +31,7 @@ class ApiRepository {
     try {
       final dio = Dio();
       final res = await dio.get(
-          'https://api.openweathermap.org/data/2.5/forecast?lat=${position?.latitude}&lon=${position?.longitude}&units=metric&appid=${MyKey.api_token}');
+          'https://api.openweathermap.org/data/2.5/forecast?lat=${position?.latitude}&lon=${position?.longitude}&units=metric&appid=${MyKey.apiToken}');
       List data = res.data['list'];
       List<WeatherDetail> result = List<WeatherDetail>.from(
           data.map((e) => WeatherDetail.fromMap(e)).toList());

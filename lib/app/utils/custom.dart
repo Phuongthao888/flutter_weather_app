@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 /*
  - Format tên hình ảnh lại 1 kiểu nhất định.
@@ -7,24 +6,24 @@ import 'package:flutter/material.dart';
 */
 
 
-const MyLinkAsset = 'assets/images/weathers/';
+const myLinkAsset = 'assets/images/weathers/';
 
 class AssetCustom {
   static String getLinkImage(String name) =>
-      '$MyLinkAsset${name.replaceAll(' ', 'replace').toLowerCase()}.png';
+      '$myLinkAsset${name.replaceAll(' ', 'replace').toLowerCase()}.png';
 }
 
 class MyKey {
-  static const String api_token = 'e346c05cd29f1a5ffd0f3d12f1043498';
+  static const String apiToken = 'e346c05cd29f1a5ffd0f3d12f1043498';
 }
 
-Widget createTemp(num MyTemp, {double size = 100}) {
+Widget createTemp(num myTemp, {double size = 100}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        MyTemp.round().toString(),
+        myTemp.round().toString(),
         style: TextStyle(
           fontSize: size,
           color: Colors.white,

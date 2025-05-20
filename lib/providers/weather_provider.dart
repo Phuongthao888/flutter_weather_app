@@ -9,6 +9,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:weather_app/models/weather.dart';
 import 'package:weather_app/repositories/api_repository.dart';
 
@@ -27,8 +28,18 @@ class WeatherProvider extends ChangeNotifier {
     WeatherData result = await ApiRepository.callApiGetWeather(position);
     return result;
   }
+
   Future<List<WeatherDetail>> getWeatherCurrentForecast() async {
     List<WeatherDetail> result = await ApiRepository.callApiGetWeatherForecast(position);
     return result;
+  }
+
+  Future<void> updateHomeWidget(WeatherData data) async {
+    await HomeWidget.saveWidgetData('city', data.name);
+    await HomeWidget.saveWidgetData('temperature', '${data.main.temp.round()}°C');
+    await HomeWidget.saveWidgetData('description', data.weather[0].main);
+    await HomeWidget.updateWidget(
+      androidName: 'WeatherWidgetProvider',
+    );
   }
 }

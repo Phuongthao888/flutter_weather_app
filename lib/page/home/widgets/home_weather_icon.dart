@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weather_app/app/utils/Custom.dart';
+import 'package:weather_app/app/utils/custom.dart';
 
 class HomeWeatherIcon extends StatelessWidget {
   const HomeWeatherIcon({super.key, required this.nameIcon});

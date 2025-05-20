@@ -9,7 +9,7 @@ class HomeLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    final datetime_format = DateFormat('dd/MM/yyyy HH:mm');
+    final datetimeFormat = DateFormat('dd/MM/yyyy HH:mm');
     return Column(
       children: [
         Row(
@@ -27,7 +27,7 @@ class HomeLocation extends StatelessWidget {
           ],
         ),
         Text(
-          datetime_format.format(DateTime.now()),
+          datetimeFormat.format(DateTime.now()),
           style: const TextStyle(
               fontSize: 20
           ),

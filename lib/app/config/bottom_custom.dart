@@ -11,7 +11,7 @@ class BottomCustom extends StatefulWidget {
 }
 
 class _BottomCustomState extends State<BottomCustom> {
-  List<BottomNavigationBarItem> ListHandleItems = [
+  List<BottomNavigationBarItem> listHandleItems = [
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.home), label: 'Home'),
     const BottomNavigationBarItem(
@@ -30,15 +30,15 @@ class _BottomCustomState extends State<BottomCustom> {
           currentIndex: activePage,
           //Chọn icon nào thì nổi icon đó lên dựa vào các thuộc tính phía dưới
           selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.black,
-          backgroundColor: Colors.lightBlueAccent,
+          unselectedItemColor: Colors.white,
+          backgroundColor: const Color(0xFF2C2C2C),
           elevation: 0,
           onTap: (index) {
             setState(() {
               activePage = index;
             });
           },
-          items: ListHandleItems),
+          items: listHandleItems),
     );
   }
 }
