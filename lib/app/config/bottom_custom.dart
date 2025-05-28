@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_app/page/details/detail_page.dart';
 import 'package:weather_app/page/home/home_page.dart';
+import 'package:weather_app/page/profile/profile_setting.dart';
 
 class BottomCustom extends StatefulWidget {
   const BottomCustom({super.key});
@@ -16,9 +17,11 @@ class _BottomCustomState extends State<BottomCustom> {
         icon: Icon(CupertinoIcons.home), label: 'Home'),
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.list_bullet), label: 'Detail'),
+    const BottomNavigationBarItem(
+        icon: Icon(CupertinoIcons.settings), label: 'Setting'),
   ];
 
-  List<Widget> listWidget = [const HomePage(), const DetailPage()];
+  List<Widget> listWidget = [const HomePage(), const DetailPage(), const ProfileSetting(),];
   int activePage = 0;
 
   @override
