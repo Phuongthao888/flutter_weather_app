@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeDetail extends StatelessWidget {
-  const HomeDetail({super.key, required this.mySpeed, required this.myHumidity});
+  const HomeDetail({super.key, required this.mySpeed, required this.myHumidity, this.height});
   final num mySpeed;
   final num myHumidity;
+  final double? height;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -20,7 +22,7 @@ class HomeDetail extends StatelessWidget {
               Image.asset(
                 'assets/images/icons/Vector.png',
                 fit: BoxFit.cover,
-                height: 40,
+                height: height,
               ),
               Container(
                 margin: const EdgeInsets.only(
@@ -39,7 +41,7 @@ class HomeDetail extends StatelessWidget {
               Image.asset(
                 'assets/images/icons/humidity.png',
                 fit: BoxFit.cover,
-                height: 40,
+                height: height,
               ),
               Container(
                 margin: const EdgeInsets.only(
