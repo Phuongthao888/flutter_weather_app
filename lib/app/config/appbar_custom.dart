@@ -52,12 +52,12 @@ class AppbarCustom extends StatelessWidget{
                 ),
               ],
             ),
-            actions: [
-              const Icon(CupertinoIcons.search),
-              SizedBox(
-                width: size.width / 20,
-              )
-            ],
+            // actions: [
+            //   const Icon(CupertinoIcons.search),
+            //   SizedBox(
+            //     width: size.width / 20,
+            //   )
+            // ],
           ),
           body: DetailBody(listData: listData,),
         );
