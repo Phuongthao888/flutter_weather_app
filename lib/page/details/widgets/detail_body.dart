@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:weather_app/page/home/chart.dart';
 import 'package:weather_app/repositories/firebase_database.dart';
 
 import '../../../app/utils/custom.dart';
@@ -47,6 +48,24 @@ class _DetailBodyState extends State<DetailBody> {
     );
   }
 
+  List<FlSpot> _generateHumiditySpotsForDay(String day) {
+    final List<WeatherDetail> dayData = groupedData[day]!;
+    return List.generate(
+      dayData.length,
+      (index) =>
+          FlSpot(index.toDouble(), dayData[index].main.humidity.toDouble()),
+    );
+  }
+
+  List<FlSpot> _generateFeelLikepotsForDay(String day) {
+    final List<WeatherDetail> dayData = groupedData[day]!;
+    return List.generate(
+      dayData.length,
+      (index) =>
+          FlSpot(index.toDouble(), dayData[index].main.feels_like.toDouble()),
+    );
+  }
+
   String getWeatherAlert(String weather) {
     final weatherLower = weather.toLowerCase();
     String baseMessage;
@@ -72,8 +91,9 @@ class _DetailBodyState extends State<DetailBody> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
     final tempSpots = _generateSpotsForDay(selectedDay);
+    final humiditySpots = _generateHumiditySpotsForDay(selectedDay);
+    final feelLikeSpots = _generateFeelLikepotsForDay(selectedDay);
     final dayData = groupedData[selectedDay]!;
 
     return ListView(
@@ -101,117 +121,13 @@ class _DetailBodyState extends State<DetailBody> {
           ),
         ),
 
-        // --- Biểu đồ ---
-        Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white30,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            children: [
-              const Text(
-                'Biểu đồ Nhiệt độ (Temp)',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 300,
-                child: LineChart(
-                  LineChartData(
-                    backgroundColor: Colors.black,
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(color: Colors.white24, width: 1),
-                    ),
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: true,
-                      getDrawingHorizontalLine: (value) =>
-                          const FlLine(color: Colors.white12, strokeWidth: 1),
-                      getDrawingVerticalLine: (value) =>
-                          const FlLine(color: Colors.white12, strokeWidth: 1),
-                    ),
-                    titlesData: FlTitlesData(
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 30,
-                          interval: 1,
-                          getTitlesWidget: (value, meta) {
-                            if (value.toInt() < dayData.length) {
-                              final dt =
-                                  DateTime.parse(dayData[value.toInt()].dt_txt);
-                              final time = DateFormat('HH').format(dt);
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(time,
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.white70)),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      ),
-                    ),
-                    minY: tempSpots
-                            .map((e) => e.y)
-                            .reduce((a, b) => a < b ? a : b) -
-                        2,
-                    maxY: tempSpots
-                            .map((e) => e.y)
-                            .reduce((a, b) => a > b ? a : b) +
-                        2,
-                    lineBarsData: [
-                      LineChartBarData(
-                        isCurved: true,
-                        spots: tempSpots,
-                        color: Colors.orangeAccent.shade400,
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.orangeAccent.shade200,
-                            Colors.deepOrangeAccent.shade700,
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        barWidth: 4,
-                        isStrokeCapRound: true,
-                        dotData: FlDotData(
-                          show: true,
-                          getDotPainter: (spot, percent, barData, index) =>
-                              FlDotCirclePainter(
-                            radius: 6,
-                            color: Colors.orangeAccent.shade700,
-                            strokeWidth: 2,
-                            strokeColor: Colors.white,
-                          ),
-                        ),
-                        belowBarData: BarAreaData(
-                          show: true,
-                          gradient: const LinearGradient(
-                            colors: [
-                              Colors.orangeAccent,
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+        // --- Biểu đồ nhiệt độ---
+        Chart(
+            dayData: dayData,
+            tempSpots: tempSpots,
+            humiditySpots: humiditySpots,
+            feelLikeSpots: feelLikeSpots,
         ),
-
         // --- Danh sách thời tiết của ngày được chọn ---
         Text(
           selectedDay,
@@ -226,68 +142,76 @@ class _DetailBodyState extends State<DetailBody> {
               getWeatherAlert(data.weather[0].main); // lấy thông báo nhắc nhở
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white30,
-              borderRadius: BorderRadius.circular(10),
+              color: Colors.white24,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 6,
+                  offset: Offset(0, 3),
+                ),
+              ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //Text Thông Tin
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              createTemp(data.main.temp, size: 25),
-                              SizedBox(width: size.width / 10),
-                              Text(
-                                data.weather[0].main,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white70),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                          Text(time,
-                              style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
+                          infoRow(Icons.wb_sunny, "Hiện tượng",
+                              data.weather[0].main),
+                          const SizedBox(height: 6),
+                          infoRow(Icons.thermostat, "Nhiệt độ",
+                              "${data.main.temp.toStringAsFixed(1)}°C"),
+                          const SizedBox(height: 6),
+                          infoRow(Icons.water_drop, "Độ ẩm",
+                              "${data.main.humidity.round()}%"),
+                          const SizedBox(height: 6),
+                          infoRow(Icons.access_time, "Thời điểm", time),
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: size.width / 4,
-                      child: Image.asset(AssetCustom.getLinkImage(data.weather[0].main)),
+
+                    // Ảnh thời tiết
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        AssetCustom.getLinkImage(data.weather[0].main),
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
 
-                // Container lời nhắc với icon, nền nhẹ, padding, bo góc
+                // Lời nhắc
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: const Color.fromRGBO(255, 165, 0, 0.15),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.info, color: Colors.orangeAccent, size: 18),
-                      const SizedBox(width: 6),
+                      const Icon(Icons.info_outline,
+                          color: Colors.orangeAccent, size: 20),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           alertMessage,
                           style: const TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             fontStyle: FontStyle.italic,
                             color: Colors.orangeAccent,
                           ),
@@ -303,4 +227,27 @@ class _DetailBodyState extends State<DetailBody> {
       ],
     );
   }
+}
+
+Widget infoRow(IconData icon, String label, String value) {
+  return Row(
+    children: [
+      Icon(icon, color: Colors.white70, size: 18),
+      const SizedBox(width: 6),
+      Text("$label: ",
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          )),
+      Expanded(
+        child: Text(value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            )),
+      ),
+    ],
+  );
 }
