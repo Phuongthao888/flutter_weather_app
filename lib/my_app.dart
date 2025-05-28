@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/app/config/theme_custom.dart';
 import 'package:weather_app/app/config/bottom_custom.dart';
+import 'package:weather_app/providers/user_provider.dart';
 import 'package:weather_app/providers/weather_provider.dart';
 
 class MyApp extends StatelessWidget {
@@ -11,15 +12,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      /* bọc nó lại, để bất kỳ màn hình nào trong MyApp cũng có thể lấy nó ra
-      để sử dụng */
-      create: (_) => WeatherProvider()..updatePosition(positionCurrent),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => WeatherProvider()..updatePosition(positionCurrent),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),  // thêm UserProvider ở đây
+        ),
+      ],
       child: MaterialApp(
         theme: ThemeCustom.themeLight,
         debugShowCheckedModeBanner: false,
         home: const BottomCustom(),
       ),
     );
+
   }
 }
