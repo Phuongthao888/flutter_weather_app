@@ -27,7 +27,8 @@ class ApiRepository {
     }
   }
 
-  static Future<List<WeatherDetail>> callApiGetWeatherForecast(Position? position) async {
+  static Future<List<WeatherDetail>> callApiGetWeatherForecast(
+      Position? position) async {
     try {
       final dio = Dio();
       final res = await dio.get(
